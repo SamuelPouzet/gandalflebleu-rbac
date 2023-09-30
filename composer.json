@@ -12,5 +12,8 @@
     },
     "scripts": {
         "test": "phpunit"
+    },
+    "require": {
+        "doctrine/doctrine-orm-module": "^6.0"
     }
 }
