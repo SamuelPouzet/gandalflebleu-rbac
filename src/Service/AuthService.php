@@ -40,27 +40,21 @@ class AuthService
     {
         if(! isset($this->filters[$routeService->getControllerName()])) {
             if($this->mode === static::MODE_PERMISSIVE) {
-                echo "autorisé";
                 return true;
             }
-            echo "refusé";
             return false;
         }
         $controllerFilter = $this->filters[$routeService->getControllerName()];
         if(! isset($controllerFilter[$routeService->getActionName()])) {
             if($this->mode === static::MODE_PERMISSIVE) {
-                echo "autorisé";
                 return true;
             }
-            echo "refusé";
             return false;
         }
         $actionFilter = $controllerFilter[$routeService->getActionName()];
         if(in_array('*', $actionFilter)) {
-            echo 'always granted';
-            return 'true';
+            return true;
         }
-        echo "en test";
         return true;
     }
 }

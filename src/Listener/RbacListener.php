@@ -61,7 +61,6 @@ class RbacListener implements  ListenerAggregateInterface
      */
     public function checkAuthorization(): void
     {
-        ConfigProvider::provide( $this->event->getApplication()->getServiceManager());
         $routeService = $this->event->getApplication()->getServiceManager()->get(RouteService::class);
         $routeService->init($this->event);
         $authService = $this->event->getApplication()->getServiceManager()->get(AuthService::class);

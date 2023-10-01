@@ -14,6 +14,14 @@
         "test": "phpunit"
     },
     "require": {
-        "doctrine/doctrine-orm-module": "^6.0"
+        "doctrine/doctrine-orm-module": "^6.0",
+        "laminas/laminas-session": "^2.16",
+        "laminas/laminas-form": "^3.13",
+        "laminas/laminas-mvc-i18n": "^1.7"
+    },
+    "config": {
+        "allow-plugins": {
+            "laminas/laminas-component-installer": true
+        }
     }
 }
