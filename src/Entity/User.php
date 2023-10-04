@@ -1,7 +1,9 @@
 <?php
 
 namespace Gandalflebleu\Rbac\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
+use Gandalflebleu\Rbac\Element\UserStatus;
 
 /**
  * @ORM\Entity
@@ -28,9 +30,9 @@ class User
     protected string $password;
 
     /**
-     * @ORM\Column(name="email")
+     * @ORM\Column(name="status")
      */
-    protected $email;
+    protected string $status;
 
     /**
      * @return int
@@ -87,20 +89,21 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return UserStatus
      */
-    public function getEmail()
+    public function getStatus(): UserStatus
     {
-        return $this->email;
+        $statusName = $this->status;
+        return UserStatus::$statusName;
     }
 
     /**
-     * @param mixed $email
+     * @param UserStatus $status
      * @return User
      */
-    public function setEmail($email)
+    public function setStatus(UserStatus $status): User
     {
-        $this->email = $email;
+        $this->status = $status->name;
         return $this;
     }
 

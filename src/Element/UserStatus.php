@@ -2,9 +2,9 @@
 
 namespace Gandalflebleu\Rbac\Element;
 
-enum UserStatus: int
+enum UserStatus
 {
-    case Active = 1;
-    case Retired = 2;
-    case Disabled = 0;
+    case Active;
+    case Retired;
+    case Disabled;
 }

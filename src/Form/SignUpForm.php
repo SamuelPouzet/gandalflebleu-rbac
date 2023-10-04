@@ -20,7 +20,7 @@ class SignUpForm extends Form
         $this->setAttribute('method', 'post');
 
         $this->addElements();
-        $this->addInputFilter();
+       // $this->addInputFilter();
     }
 
     /**
