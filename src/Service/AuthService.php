@@ -14,12 +14,16 @@ class AuthService
 
     protected array $filters;
 
+    protected AuthenticationService $authenticationService;
+
     const MODE_RESTRICTIVE = 'restrictive';
     const MODE_PERMISSIVE = 'permissive';
-    public function __construct(array $config)
+    public function __construct(array $config, AuthenticationService $authenticationService)
     {
-        $this->setMode($config['mode']);
+        $this->setMode($config['mode']??static::MODE_RESTRICTIVE);
         $this->setFilters($config['filters']);
+
+        $this->authenticationService = $authenticationService;
     }
 
     protected function setMode(string $mode): void
@@ -44,6 +48,7 @@ class AuthService
             }
             return false;
         }
+
         $controllerFilter = $this->filters[$routeService->getControllerName()];
         if(! isset($controllerFilter[$routeService->getActionName()])) {
             if($this->mode === static::MODE_PERMISSIVE) {
@@ -55,6 +60,7 @@ class AuthService
         if(in_array('*', $actionFilter)) {
             return true;
         }
+        $this->authenticationService->isAuthenticated();
         return true;
     }
 }

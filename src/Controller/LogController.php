@@ -2,6 +2,7 @@
 
 namespace Gandalflebleu\Rbac\Controller;
 
+use Gandalflebleu\Rbac\Adapter\Result;
 use Gandalflebleu\Rbac\Form\SignInForm;
 use Gandalflebleu\Rbac\Form\SignUpForm;
 use Gandalflebleu\Rbac\Manager\UserManager;
@@ -28,18 +29,22 @@ class LogController extends AbstractActionController
     {
 
         $form = new SignInForm();
+        $error = null;
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             $form->setData($data);
             if ($form->isValid()) {
                 $result = $this->authenticationService->authenticate($form->getData());
-                var_dump($result);
+                if($result->getCode() !== Result::ACCESS_GRANTED) {
+                    $error = $result;
+                }
             }
         }
 
         return new ViewModel([
             'form'=>$form,
+            'error'=>$error,
         ]);
 
     }

@@ -10,6 +10,7 @@ use Gandalflebleu\Rbac\Service\Factory\AuthenticationServiceFactory;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Laminas\Session;
 
 return [
     'router' => [
@@ -61,5 +62,24 @@ return [
                 ]
             ]
         ]
+    ],
+    'session_containers' => [
+        Session\Container::class,
+    ],
+    'session_storage' => [
+        'type' => Session\Storage\SessionArrayStorage::class,
+    ],
+    'session_config'  => [
+        'gc_maxlifetime' => 7200,
+        // …
+    ],
+    'access_filter'=>[
+        'filters'=>[
+            \Gandalflebleu\Rbac\Controller\LogController::class=> [
+                'index'=>[
+                    '@',
+                ],
+            ],
+        ],
     ],
 ];

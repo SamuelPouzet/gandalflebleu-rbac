@@ -113,7 +113,8 @@ class AuthAdapter
                 return $this->populateResult(Result::PASSWORD_REJECTED, 'wrong password given' );
             }
 
-            throw new \Exception('test');
+            $this->result->setUser($account);
+            return $this->populateResult(Result::ACCESS_GRANTED, 'credentials OK' );
         }catch (\Exception $exception) {
             return $this->populateResult(Result::CONF_ERROR, $exception->getMessage() );
         }

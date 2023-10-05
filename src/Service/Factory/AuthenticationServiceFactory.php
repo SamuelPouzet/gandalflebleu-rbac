@@ -6,6 +6,7 @@ use Gandalflebleu\Rbac\Adapter\AuthAdapter;
 use Gandalflebleu\Rbac\Manager\UserManager;
 use Gandalflebleu\Rbac\Service\AuthenticationService;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\Session\Container;
 use Psr\Container\ContainerInterface;
 
 class AuthenticationServiceFactory implements FactoryInterface
@@ -15,8 +16,9 @@ class AuthenticationServiceFactory implements FactoryInterface
     {
         $userManager = $container->get(UserManager::class);
         $authAdapter = $container->get(AuthAdapter::class);
+        $sessionContainer = $container->get(Container::class);
 
-        return new AuthenticationService($userManager, $authAdapter);
+        return new AuthenticationService($userManager, $authAdapter, $sessionContainer);
     }
 
 }

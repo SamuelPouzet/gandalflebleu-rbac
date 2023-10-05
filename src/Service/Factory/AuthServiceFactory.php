@@ -2,6 +2,7 @@
 
 namespace Gandalflebleu\Rbac\Service\Factory;
 
+use Gandalflebleu\Rbac\Service\AuthenticationService;
 use Gandalflebleu\Rbac\Service\AuthService;
 use Laminas\Router\RouteMatch;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -30,7 +31,9 @@ class AuthServiceFactory implements FactoryInterface
                 'filters'=>[],
             ];
         }
-        return new AuthService($config);
+
+        $authenticationService = $container->get(AuthenticationService::class);
+        return new AuthService($config, $authenticationService);
     }
 
 }
