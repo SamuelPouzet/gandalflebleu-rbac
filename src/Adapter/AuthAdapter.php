@@ -4,6 +4,7 @@ namespace Gandalflebleu\Rbac\Adapter;
 
 use Doctrine\ORM\EntityManager;
 use Gandalflebleu\Rbac\Entity\User;
+use Laminas\Crypt\Password\Bcrypt;
 
 class AuthAdapter
 {
@@ -106,8 +107,9 @@ class AuthAdapter
 
             $account = $accounts[0];
             //check password
-            //@todo bcrypt password_verify
-            if($this->password !== $account->getpassword()) {
+            $bcrypt = new Bcrypt();
+
+            if( ! $bcrypt->verify($this->password, $account->getpassword()) ) {
                 return $this->populateResult(Result::PASSWORD_REJECTED, 'wrong password given' );
             }
 

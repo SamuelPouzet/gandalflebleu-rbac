@@ -18,7 +18,8 @@
         "laminas/laminas-session": "^2.16",
         "laminas/laminas-form": "^3.13",
         "laminas/laminas-mvc-i18n": "^1.7",
-        "doctrine/dbal": "^3.7"
+        "doctrine/dbal": "^3.7",
+        "laminas/laminas-crypt": "^3.10"
     },
     "config": {
         "allow-plugins": {

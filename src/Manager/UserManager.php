@@ -5,6 +5,7 @@ namespace Gandalflebleu\Rbac\Manager;
 use Doctrine\ORM\EntityManager;
 use Gandalflebleu\Rbac\Element\UserStatus;
 use Gandalflebleu\Rbac\Entity\User;
+use Laminas\Crypt\Password\Bcrypt;
 
 class UserManager
 {
@@ -21,13 +22,19 @@ class UserManager
         $user = new User();
 
         $user->setLogin($data['login']);
-        $user->setPassword($data['password']);
+        $user->setPassword($this->hash($data['password']));
         $user->setStatus(UserStatus::Active);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         return $user;
+    }
+
+    protected function hash($password): string
+    {
+        $bcrypt = new Bcrypt();
+        return $bcrypt->create($password);
     }
 
 }
