@@ -24,8 +24,6 @@ class UserManager
         $user->setPassword($data['password']);
         $user->setStatus(UserStatus::Active);
 
-        var_dump($user);
-
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

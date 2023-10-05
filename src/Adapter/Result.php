@@ -1,6 +1,8 @@
 <?php
 
-namespace Gandalflebleu\Rbac\Element;
+namespace Gandalflebleu\Rbac\Adapter;
+
+use Gandalflebleu\Rbac\Entity\User;
 
 class Result
 {
@@ -32,17 +34,17 @@ class Result
     /**
      * @var int
      */
-    protected $code;
+    protected int $code;
 
     /**
      * @var string
      */
-    protected $message;
+    protected string $message;
 
     /**
      * @var User|null
      */
-    protected $user;
+    protected ?User $user;
 
     /**
      * @return int

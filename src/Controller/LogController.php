@@ -5,17 +5,18 @@ namespace Gandalflebleu\Rbac\Controller;
 use Gandalflebleu\Rbac\Form\SignInForm;
 use Gandalflebleu\Rbac\Form\SignUpForm;
 use Gandalflebleu\Rbac\Manager\UserManager;
+use Gandalflebleu\Rbac\Service\AuthenticationService;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 
 class LogController extends AbstractActionController
 {
 
-    protected UserManager $userManager;
+    protected AuthenticationService $authenticationService;
 
-    public function __construct(UserManager $userManager)
+    public function __construct(AuthenticationService $authenticationService)
     {
-        $this->userManager = $userManager;
+        $this->authenticationService = $authenticationService;
     }
 
     public function IndexAction()
@@ -28,6 +29,14 @@ class LogController extends AbstractActionController
 
         $form = new SignInForm();
 
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $result = $this->authenticationService->authenticate($form->getData());
+                var_dump($result);
+            }
+        }
 
         return new ViewModel([
             'form'=>$form,
@@ -42,9 +51,8 @@ class LogController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             $form->setData($data);
-           // var_dump($form->isValid());die;
             if ($form->isValid()) {
-                $this->userManager->addUser($form->getData());
+                $this->authenticationService->createAccount($form->getData());
             }
         }
 

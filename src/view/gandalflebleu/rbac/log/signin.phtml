@@ -12,6 +12,13 @@
             <?= $this->formElement($this->form->get('password')); ?>
             <small><?= $this->formElementErrors($this->form->get('password')); ?></small>
         </div>
+
+        <div class="form-group">
+            <label for="login" class="form-label mt-4"><?= $this->formLabel($this->form->get('remember_me')); ?></label>
+            <?= $this->formElement($this->form->get('remember_me')); ?>
+            <small><?= $this->formElementErrors($this->form->get('remember_me')); ?></small>
+        </div>
+
         <?= $this->formElement($this->form->get('csrf')); ?>
         <?= $this->formElementErrors($this->form->get('csrf')); ?>
         <?= $this->formElement($this->form->get('submit')); ?>
