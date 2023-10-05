@@ -2,6 +2,8 @@
 
 namespace Gandalflebleu\Rbac\Listener;
 
+use Gandalflebleu\Rbac\Adapter\Connexion;
+use Gandalflebleu\Rbac\Adapter\Result;
 use Gandalflebleu\Rbac\Providers\ConfigProvider;
 use Gandalflebleu\Rbac\Service\AuthService;
 use Gandalflebleu\Rbac\Service\RouteService;
@@ -9,6 +11,7 @@ use Laminas\EventManager\EventInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Mvc\MvcEvent;
+use PHPUnit\Util\Exception;
 
 
 /**
@@ -64,7 +67,19 @@ class RbacListener implements  ListenerAggregateInterface
         $routeService = $this->event->getApplication()->getServiceManager()->get(RouteService::class);
         $routeService->init($this->event);
         $authService = $this->event->getApplication()->getServiceManager()->get(AuthService::class);
-        $authService->authenticate($routeService);
+        $accred = $authService->authenticate($routeService);
+        switch($accred->getCode() ) {
+            case Connexion::ALLOWED:
+                return;
+            case Connexion::NEEDS_CONNEXION:
+                $routeService->redirectToLog($this->event);
+                break;
+            case Connexion::DENIED:
+                //@todo
+                die('denied');
+            default:
+                throw new \Exception(sprintf('Result : %1$s response code not implemented'));
+        }
     }
 
 }

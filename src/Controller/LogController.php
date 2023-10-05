@@ -28,6 +28,10 @@ class LogController extends AbstractActionController
     public function signInAction(): ViewModel
     {
 
+        if($this->currentUser()) {
+            $this->redirect()->toRoute('home');
+        }
+
         $form = new SignInForm();
         $error = null;
 

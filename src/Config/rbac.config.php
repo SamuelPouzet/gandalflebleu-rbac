@@ -3,8 +3,11 @@
 namespace Gandalflebleu\Rbac;
 
 use Gandalflebleu\Rbac\Adapter\AuthAdapter;
+use Gandalflebleu\Rbac\Adapter\Connexion;
 use Gandalflebleu\Rbac\Adapter\Factory\AuthAdapterFactory;
 use Gandalflebleu\Rbac\Adapter\Result;
+use Gandalflebleu\Rbac\Plugin\PluginFactory\UserPluginFactory;
+use Gandalflebleu\Rbac\Plugin\UserPlugin;
 use Gandalflebleu\Rbac\Service\AuthenticationService;
 use Gandalflebleu\Rbac\Service\Factory\AuthenticationServiceFactory;
 use Laminas\Router\Http\Literal;
@@ -42,7 +45,16 @@ return [
 
             AuthAdapter::class => AuthAdapterFactory::class,
             Result::class => InvokableFactory::class,
+            Connexion::class => InvokableFactory::class,
         ],
+    ],
+    'controller_plugins' => [
+        'factories' => [
+            UserPlugin::class => UserPluginFactory::class,
+        ],
+        'aliases' => [
+            'currentUser' => UserPlugin::class,
+        ]
     ],
     'view_manager' => [
         'template_path_stack' => [
@@ -69,14 +81,14 @@ return [
     'session_storage' => [
         'type' => Session\Storage\SessionArrayStorage::class,
     ],
-    'session_config'  => [
+    'session_config' => [
         'gc_maxlifetime' => 7200,
         // …
     ],
-    'access_filter'=>[
-        'filters'=>[
-            \Gandalflebleu\Rbac\Controller\LogController::class=> [
-                'index'=>[
+    'access_filter' => [
+        'filters' => [
+            \Gandalflebleu\Rbac\Controller\LogController::class => [
+                'index' => [
                     '@',
                 ],
             ],

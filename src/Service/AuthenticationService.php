@@ -46,8 +46,12 @@ class AuthenticationService
 
     public function isAuthenticated()
     {
-        var_dump($this->sessionContainer->user);
         return $this->sessionContainer->user !== null;
+    }
+
+    public function getAuthentication()
+    {
+        return $this->sessionContainer->user;
     }
 
 }
