@@ -17,7 +17,9 @@ use Gandalflebleu\Rbac\Service\AuthenticationService;
 use Gandalflebleu\Rbac\Service\AuthService;
 use Gandalflebleu\Rbac\Service\Factory\AuthenticationServiceFactory;
 use Gandalflebleu\Rbac\Service\Factory\AuthServiceFactory;
+use Gandalflebleu\Rbac\Service\Factory\RbacServiceFactory;
 use Gandalflebleu\Rbac\Service\Factory\RoleServiceFactory;
+use Gandalflebleu\Rbac\Service\RbacService;
 use Gandalflebleu\Rbac\Service\RoleService;
 use Gandalflebleu\Rbac\Service\RouteService;
 use Laminas\Cache\Storage\Adapter\Filesystem;
@@ -52,13 +54,13 @@ return [
             AuthService::class => AuthServiceFactory::class,
             RouteService::class => InvokableFactory::class,
             AuthenticationService::class => AuthenticationServiceFactory::class,
-            RoleService::class=>RoleServiceFactory::class,
 
             UserManager::class => UserManagerFactory::class,
 
             AuthAdapter::class => AuthAdapterFactory::class,
             Result::class => InvokableFactory::class,
             Connexion::class => InvokableFactory::class,
+            RbacService::class => RbacServiceFactory::class,
         ],
     ],
     'controller_plugins' => [

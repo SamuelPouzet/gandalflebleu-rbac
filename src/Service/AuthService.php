@@ -16,20 +16,19 @@ class AuthService
 
     protected array $filters;
 
-    protected AuthenticationService $authenticationService;
-
-    protected Connexion $connexion;
 
     const MODE_RESTRICTIVE = 'restrictive';
     const MODE_PERMISSIVE = 'permissive';
 
-    public function __construct(array $config, AuthenticationService $authenticationService, Connexion $connexion)
+    public function __construct(
+        array $config,
+        protected AuthenticationService $authenticationService,
+        protected Connexion $connexion,
+        protected RbacService $rbacService,
+    )
     {
         $this->setMode($config['mode'] ?? static::MODE_RESTRICTIVE);
         $this->setFilters($config['filters']);
-
-        $this->authenticationService = $authenticationService;
-        $this->connexion = $connexion;
     }
 
     protected function setMode(string $mode): void
@@ -91,7 +90,14 @@ class AuthService
         $userAccount = $this->authenticationService->getAuthentication();
 
         //page allowed to specific role
-        //@todo
+        if(isset($actionFilter['allowed_roles'])) {
+            foreach ($actionFilter['allowed_roles'] as $allowed_role) {
+                if($this->rbacService->userHasRole($userAccount, $allowed_role)) {
+                    echo 'granted by role';
+                    return $this->setConnexion(Connexion::ALLOWED);
+                }
+            }
+        }
 
         //page allowed to specific permission
         //@todo

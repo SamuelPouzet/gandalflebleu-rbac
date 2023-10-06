@@ -24,7 +24,17 @@ class Role
     protected string $name;
 
     /**
-     * @ORM\Column (name="is_active")
+     * @ORM\Column (name="code")
+     */
+    protected string $code;
+
+    /**
+     * @ORM\Column (name="description")
+     */
+    protected string $description;
+
+    /**
+     * @ORM\Column (name="active")
      */
     protected string $is_active;
 
@@ -38,8 +48,8 @@ class Role
      * @var Collection
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="children")
      * @ORM\JoinTable(name="role_hierarchy",
-     *   joinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")},
-     *   inverseJoinColumns={@ORM\JoinColumn(name="child_id", referencedColumnName="id")}
+     *   joinColumns={@ORM\JoinColumn(name="child_id", referencedColumnName="id")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")}
      * )
      */
     protected Collection $parents;
@@ -196,6 +206,40 @@ class Role
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
 
+    /**
+     * @param string $code
+     * @return Role
+     */
+    public function setCode(string $code): Role
+    {
+        $this->code = $code;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return Role
+     */
+    public function setDescription(string $description): Role
+    {
+        $this->description = $description;
+        return $this;
+    }
 
 }
