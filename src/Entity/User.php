@@ -2,6 +2,8 @@
 
 namespace Gandalflebleu\Rbac\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gandalflebleu\Rbac\Element\UserStatus;
 
@@ -33,6 +35,32 @@ class User
      * @ORM\Column(name="status")
      */
     protected string $status;
+
+    /**
+     * @var Collection
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
+     * @ORM\JoinTable(name="role_user",
+     *   joinColumns={@ORM\JoinColumn(name="id_user", referencedColumnName="id")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="id_role", referencedColumnName="id")}
+     * )
+     */
+    protected Collection $roles;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+    }
+
+    /**
+     *
+     */
+    public function getArrayCopy()
+    {
+        return get_object_vars($this);
+    }
 
     /**
      * @return int
@@ -106,5 +134,45 @@ class User
         $this->status = $status->name;
         return $this;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getRoles(): Collection
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param Collection $roles
+     * @return User
+     */
+    public function setRoles(Collection $roles): User
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    /**
+     * @param Role $role
+     * @return User
+     */
+    public function addRole(Role $role): User
+    {
+        $this->roles[] = $role;
+        return $this;
+    }
+
+    /**
+     * @param Collection $roles
+     * @return User
+     */
+    public function reinitRoles(): User
+    {
+        $this->roles = new ArrayCollection();
+        return $this;
+    }
+
+
 
 }

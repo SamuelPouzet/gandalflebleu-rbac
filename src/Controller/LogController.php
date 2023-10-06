@@ -56,6 +56,10 @@ class LogController extends AbstractActionController
     public function signUpAction(): ViewModel
     {
 
+        if($this->currentUser()) {
+            $this->redirect()->toRoute('home');
+        }
+
         $form = new SignUpForm();
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();

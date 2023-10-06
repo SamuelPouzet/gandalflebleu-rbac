@@ -21,7 +21,7 @@ class AuthServiceFactory implements FactoryInterface
      * @param array|null $options
      * @return AuthService
      */
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AuthService
     {
         $config = $container->get('Config');
         if (isset($config['access_filter'])){

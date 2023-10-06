@@ -98,7 +98,7 @@ class AuthService
 
         //page allowed to specific users
         if(isset($actionFilter['allowed_users'])) {
-            if(in_array($userAccount->getLogin() )) {
+            if(in_array($userAccount->getLogin(), $actionFilter['allowed_users'] )) {
                  return $this->setConnexion(Connexion::ALLOWED);
             }
         }
