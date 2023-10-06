@@ -61,6 +61,17 @@ class Role
     protected Collection $children;
 
     /**
+     * @var Collection
+     * @ORM\ManyToMany(targetEntity="Permission", inversedBy="permissions")
+     * @ORM\JoinTable(name="role_permission",
+     *   joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="id")}
+     * )
+     */
+    protected Collection $permissions;
+
+
+    /**
      *
      */
     public function __construct()
@@ -242,4 +253,11 @@ class Role
         return $this;
     }
 
+    /**
+     *
+     */
+    public function getPermissions(): Collection
+    {
+        return $this->permissions;
+    }
 }

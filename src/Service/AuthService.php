@@ -100,7 +100,14 @@ class AuthService
         }
 
         //page allowed to specific permission
-        //@todo
+        if(isset($actionFilter['allowed_permissions'])) {
+            foreach ($actionFilter['allowed_permissions'] as $allowed_permission) {
+                if($this->rbacService->userHasPermission($userAccount, $allowed_permission)) {
+                    echo 'granted by permission';
+                    return $this->setConnexion(Connexion::ALLOWED);
+                }
+            }
+        }
 
         //page allowed to specific users
         if(isset($actionFilter['allowed_users'])) {

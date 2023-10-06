@@ -19,9 +19,19 @@ class Permission
     protected int $id;
 
     /**
-     * @ORM\Column (name="permission")
+     * @ORM\Column (name="name")
      */
-    protected string $permission;
+    protected string $name;
+
+    /**
+     * @ORM\Column (name="code")
+     */
+    protected string $code;
+
+    /**
+     * @ORM\Column (name="description")
+     */
+    protected string $description;
 
     /**
      * @ORM\Column (name="active")
@@ -71,9 +81,9 @@ class Permission
     /**
      * @return string
      */
-    public function getPermission(): string
+    public function getName(): string
     {
-        return $this->permission;
+        return $this->name;
     }
 
     /**
@@ -82,7 +92,7 @@ class Permission
      */
     public function setName(string $name): Permission
     {
-        $this->permission = $name;
+        $this->name = $name;
         return $this;
     }
 
@@ -104,5 +114,58 @@ class Permission
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     * @return Permission
+     */
+    public function setCode(string $code): Permission
+    {
+        $this->code = $code;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return Permission
+     */
+    public function setDescription(string $description): Permission
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getRoles(): Collection
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param Collection $roles
+     * @return Permission
+     */
+    public function setRoles(Collection $roles): Permission
+    {
+        $this->roles = $roles;
+        return $this;
+    }
 
 }

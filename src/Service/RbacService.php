@@ -3,6 +3,7 @@
 namespace Gandalflebleu\Rbac\Service;
 
 use Doctrine\ORM\EntityManager;
+use Gandalflebleu\Rbac\Entity\Permission;
 use Gandalflebleu\Rbac\Entity\Role;
 use Gandalflebleu\Rbac\Entity\User;
 use Laminas\Cache\Storage\StorageInterface;
@@ -41,6 +42,10 @@ class RbacService
         foreach ($roles as $role) {
             $roleId = $role->getId();
             $this->addRole($roleId, $roleId);
+            $permissions = $role->getPermissions();
+            foreach($permissions as $permission) {
+                $this->addPermission($roleId, $permission->getId() );
+            }
             $this->getChildrenRoles($roleId, $role);
         }
     }
@@ -55,6 +60,10 @@ class RbacService
                 continue;
             }
             $this->addRole($parentRoleId, $childId);
+            $permissions = $child->getPermissions();
+            foreach($permissions as $permission) {
+                $this->addPermission($parentRoleId, $permission->getId() );
+            }
             $this->getChildrenRoles($parentRoleId, $child);
         }
     }
@@ -74,6 +83,9 @@ class RbacService
         $role = $this->entityManager->getRepository(Role::class)->findOneBy([
             'code' => $role
         ]);
+        if(! $role) {
+            return false;
+        }
         $userRoles = $user->getRoles();
         foreach ($userRoles as $userRole) {
             $acceptablesRoles = $this->getRole($userRole);
@@ -107,5 +119,28 @@ class RbacService
     public function getPermissions()
     {
         return $this->content['permissions'];
+    }
+
+    public function getPermissionsByRole(Role $role)
+    {
+        return $this->content['permissions'][$role->getId()];
+    }
+
+    public function userHasPermission(User $user, string $permission): bool
+    {
+        $permission = $this->entityManager->getRepository(Permission::class)->findOneBy([
+            'code' => $permission
+        ]);
+        if(! $permission) {
+            return false;
+        }
+        $userRoles = $user->getRoles();
+        foreach ($userRoles as $userRole) {
+            $acceptablesPermissions = $this->getPermissionsByRole($userRole);
+            if (in_array($permission->getId(), $acceptablesPermissions)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
