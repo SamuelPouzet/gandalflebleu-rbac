@@ -72,6 +72,7 @@ class AuthService
                 ));
         }
         $actionFilter = $controllerFilter[$routeService->getActionName()];
+        var_dump($actionFilter); die;
         if (in_array('*', $actionFilter)) {
             return $this->setConnexion(Connexion::ALLOWED);
         }

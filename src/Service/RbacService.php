@@ -78,8 +78,11 @@ class RbacService
         return isset($this->content['roles'][$key][$role]);
     }
 
-    public function userHasRole(User $user, string $role): bool
+    public function userHasRole(?User $user, string $role): bool
     {
+        if(! $user ) {
+            return false;
+        }
         $role = $this->entityManager->getRepository(Role::class)->findOneBy([
             'code' => $role
         ]);

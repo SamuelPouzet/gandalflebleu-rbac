@@ -4,6 +4,9 @@ namespace Gandalflebleu\Rbac\Service;
 
 use Gandalflebleu\Rbac\Controller\LogController;
 use Laminas\EventManager\EventInterface;
+use Laminas\Http\PhpEnvironment\Response;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Controller\Plugin\Redirect;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Router\RouteMatch;
 
@@ -79,22 +82,9 @@ class RouteService
         return $this->routeMatch;
     }
 
-    public function redirectToLog(MvcEvent $event)
+    public function redirect(MvcEvent $event, string $routename, array $params=[]): Response
     {
-        $uri = $event->getApplication()->getRequest()->getUri();
-        $uri->setScheme(null)
-            ->setHost(null)
-            ->setPort(null)
-            ->setUserInfo(null);
-        $redirectUrl = $uri->toString();
-
-        $event->stopPropagation(true);
-
-        $this->routeMatch->setParam('controller', LogController::class);
-        $this->routeMatch->setParam('action', 'signin');
-
-//        return $event->getResponse()->redirect()->toRoute('login', [],
-//            ['query'=>['redirectUrl'=>$redirectUrl]]);
+        return $event->getTarget()->redirect()->toRoute($routename, $params);
     }
 
 

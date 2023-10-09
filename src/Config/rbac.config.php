@@ -7,8 +7,10 @@ use Gandalflebleu\Rbac\Adapter\AuthAdapter;
 use Gandalflebleu\Rbac\Adapter\Connexion;
 use Gandalflebleu\Rbac\Adapter\Factory\AuthAdapterFactory;
 use Gandalflebleu\Rbac\Adapter\Result;
+use Gandalflebleu\Rbac\Controller\AccessDeniedController;
 use Gandalflebleu\Rbac\Controller\Factory\LogControllerFactory;
 use Gandalflebleu\Rbac\Controller\LogController;
+use Gandalflebleu\Rbac\Listener\RbacListener;
 use Gandalflebleu\Rbac\Manager\Factory\UserManagerFactory;
 use Gandalflebleu\Rbac\Manager\UserManager;
 use Gandalflebleu\Rbac\Plugin\PluginFactory\UserPluginFactory;
@@ -26,6 +28,7 @@ use Laminas\Cache\Storage\Adapter\Filesystem;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
 use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
+use Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\Session;
 
@@ -42,11 +45,25 @@ return [
                     ],
                 ],
             ],
+            'access-denied' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/access-denied',
+                    'defaults' => [
+                        'controller' => AccessDeniedController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
         ],
+    ],
+    'listeners' => [
+        RbacListener::class,
     ],
     'controllers' => [
         'factories' => [
             LogController::class => LogControllerFactory::class,
+            AccessDeniedController::class => InvokableFactory::class,
         ],
     ],
     'service_manager' => [
@@ -61,6 +78,8 @@ return [
             Result::class => InvokableFactory::class,
             Connexion::class => InvokableFactory::class,
             RbacService::class => RbacServiceFactory::class,
+
+            RbacListener::class => ReflectionBasedAbstractFactory::class,
         ],
     ],
     'controller_plugins' => [

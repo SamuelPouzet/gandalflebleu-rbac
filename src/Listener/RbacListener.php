@@ -7,35 +7,26 @@ use Gandalflebleu\Rbac\Adapter\Result;
 use Gandalflebleu\Rbac\Providers\ConfigProvider;
 use Gandalflebleu\Rbac\Service\AuthService;
 use Gandalflebleu\Rbac\Service\RouteService;
+use Laminas\EventManager\AbstractListenerAggregate;
 use Laminas\EventManager\EventInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\Mvc\Controller\Plugin\Redirect;
 use Laminas\Mvc\MvcEvent;
-use PHPUnit\Util\Exception;
 
 
 /**
  *
  */
-class RbacListener implements  ListenerAggregateInterface
+class RbacListener extends AbstractListenerAggregate
 {
 
-    /**
-     * @var array
-     */
-    protected array $listeners = [];
-    /**
-     * @var EventInterface
-     */
-    protected EventInterface $event;
 
     /**
      * @param EventInterface $event
      */
-    public function __construct(EventInterface $event)
-    {
-        $this->event = $event;
-    }
+    public function __construct()
+    {}
 
     /**
      * @param EventManagerInterface $events
@@ -44,7 +35,7 @@ class RbacListener implements  ListenerAggregateInterface
      */
     public function attach(EventManagerInterface $events, $priority = 1): void
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'checkAuthorization'], $priority);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'checkAuthorization'], $priority);
     }
 
     /**
@@ -62,23 +53,25 @@ class RbacListener implements  ListenerAggregateInterface
     /**
      * @return void
      */
-    public function checkAuthorization(): void
+    public function checkAuthorization(MvcEvent $event): ?Redirect
     {
-        $routeService = $this->event->getApplication()->getServiceManager()->get(RouteService::class);
-        $routeService->init($this->event);
-        $authService = $this->event->getApplication()->getServiceManager()->get(AuthService::class);
+        if($event->getResponse()->getStatusCode() !== 200) {
+            return null;
+        }
+        $routeService = $event->getApplication()->getServiceManager()->get(RouteService::class);
+        $routeService->init($event);
+        $authService = $event->getApplication()->getServiceManager()->get(AuthService::class);
         $accred = $authService->authenticate($routeService);
+
         switch($accred->getCode() ) {
             case Connexion::ALLOWED:
-                return;
+                return null;
             case Connexion::NEEDS_CONNEXION:
-                $routeService->redirectToLog($this->event);
-                break;
+                return $routeService->redirect($event, 'log', ['action'=>'signin']);
             case Connexion::DENIED:
-                //@todo
-                die('denied');
+                return $routeService->redirect($event, 'access-denied');
             default:
-                throw new \Exception(sprintf('Result : %1$s response code not implemented'));
+                throw new \Exception(sprintf('Result : %1$s response code not implemented', $accred->getCode()));
         }
     }
 

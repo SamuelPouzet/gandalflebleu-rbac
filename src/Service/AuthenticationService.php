@@ -61,8 +61,12 @@ class AuthenticationService
         return $this->sessionContainer->user !== null;
     }
 
-    public function getAuthentication(): User
+    public function getAuthentication(): ?User
     {
+        if(! $this->isAuthenticated()) {
+            return null;
+        }
+
         if(!$this->user) {
             $this->user = $this->entityManager->getRepository(User::class)->find($this->sessionContainer->user);
         }
