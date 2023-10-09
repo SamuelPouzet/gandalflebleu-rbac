@@ -2,12 +2,13 @@
 
 namespace Gandalflebleu\Rbac;
 
-use Doctrine\ORM\EntityManager;
 use Gandalflebleu\Rbac\Adapter\AuthAdapter;
 use Gandalflebleu\Rbac\Adapter\Connexion;
 use Gandalflebleu\Rbac\Adapter\Factory\AuthAdapterFactory;
 use Gandalflebleu\Rbac\Adapter\Result;
 use Gandalflebleu\Rbac\Controller\AccessDeniedController;
+use Gandalflebleu\Rbac\Controller\AdminController;
+use Gandalflebleu\Rbac\Controller\Factory\AdminControllerFactory;
 use Gandalflebleu\Rbac\Controller\Factory\LogControllerFactory;
 use Gandalflebleu\Rbac\Controller\LogController;
 use Gandalflebleu\Rbac\Listener\RbacListener;
@@ -20,14 +21,11 @@ use Gandalflebleu\Rbac\Service\AuthService;
 use Gandalflebleu\Rbac\Service\Factory\AuthenticationServiceFactory;
 use Gandalflebleu\Rbac\Service\Factory\AuthServiceFactory;
 use Gandalflebleu\Rbac\Service\Factory\RbacServiceFactory;
-use Gandalflebleu\Rbac\Service\Factory\RoleServiceFactory;
 use Gandalflebleu\Rbac\Service\RbacService;
-use Gandalflebleu\Rbac\Service\RoleService;
 use Gandalflebleu\Rbac\Service\RouteService;
 use Laminas\Cache\Storage\Adapter\Filesystem;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
-use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
 use Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\Session;
@@ -55,6 +53,16 @@ return [
                     ],
                 ],
             ],
+            'rbac-manager' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/rbac-manager[/:action]',
+                    'defaults' => [
+                        'controller' => AdminController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
     'listeners' => [
@@ -64,6 +72,7 @@ return [
         'factories' => [
             LogController::class => LogControllerFactory::class,
             AccessDeniedController::class => InvokableFactory::class,
+            AdminController::class => AdminControllerFactory::class,
         ],
     ],
     'service_manager' => [
