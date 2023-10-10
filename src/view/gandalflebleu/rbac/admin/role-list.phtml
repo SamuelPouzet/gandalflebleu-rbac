@@ -1,0 +1,19 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">Role name</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->roles as $role): ?>
+        <tr>
+            <th scope="row"><?= $role->getId(); ?></th>
+            <td><?= $role->getName(); ?></td>
+            <td><a href="<?= $this->url('rbac-manager', ['action'=>'roleEdit', 'id'=>$role->getId()]); ?>">edit</a></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<a class="btn btn-success" href="<?= $this->url('rbac-manager', ['action'=>'roleCreate']) ?>">Create role</a>

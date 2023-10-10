@@ -14,6 +14,8 @@ use Gandalflebleu\Rbac\Controller\LogController;
 use Gandalflebleu\Rbac\Listener\RbacListener;
 use Gandalflebleu\Rbac\Manager\Factory\UserManagerFactory;
 use Gandalflebleu\Rbac\Manager\UserManager;
+use Gandalflebleu\Rbac\Plugin\IsGrantedPlugin;
+use Gandalflebleu\Rbac\Plugin\PluginFactory\IsGrantedPluginFactory;
 use Gandalflebleu\Rbac\Plugin\PluginFactory\UserPluginFactory;
 use Gandalflebleu\Rbac\Plugin\UserPlugin;
 use Gandalflebleu\Rbac\Service\AuthenticationService;
@@ -54,9 +56,9 @@ return [
                 ],
             ],
             'rbac-manager' => [
-                'type' => Literal::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route' => '/rbac-manager[/:action]',
+                    'route' => '/rbac-manager[/:action[/:id]]',
                     'defaults' => [
                         'controller' => AdminController::class,
                         'action' => 'index',
@@ -94,9 +96,11 @@ return [
     'controller_plugins' => [
         'factories' => [
             UserPlugin::class => UserPluginFactory::class,
+            IsGrantedPlugin::class => IsGrantedPluginFactory::class,
         ],
         'aliases' => [
             'currentUser' => UserPlugin::class,
+            'isGranted' => IsGrantedPlugin::class,
         ]
     ],
     'view_manager' => [
@@ -130,11 +134,36 @@ return [
     ],
     'access_filter' => [
         'filters' => [
-            \Gandalflebleu\Rbac\Controller\LogController::class => [
+            LogController::class => [
                 'index' => [
                     '@',
                 ],
             ],
+            AdminController::class => [
+                'index' => [
+                    '*',
+                ],
+                'userList' => [
+                    'allowed_roles' => [
+                        'admin'
+                    ],
+                ],
+                'userEdit' => [
+                    'allowed_roles' => [
+                        'admin'
+                    ],
+                ],
+                'userCreate' => [
+                    'allowed_roles' => [
+                        'admin'
+                    ],
+                ],
+                'roleList' => [
+                    'allowed_roles' => [
+                        'admin'
+                    ],
+                ],
+            ]
         ],
     ],
     'caches' => [

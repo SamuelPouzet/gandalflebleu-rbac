@@ -11,6 +11,7 @@ use Laminas\EventManager\AbstractListenerAggregate;
 use Laminas\EventManager\EventInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\Http\PhpEnvironment\Response;
 use Laminas\Mvc\Controller\Plugin\Redirect;
 use Laminas\Mvc\MvcEvent;
 
@@ -53,7 +54,7 @@ class RbacListener extends AbstractListenerAggregate
     /**
      * @return void
      */
-    public function checkAuthorization(MvcEvent $event): ?Redirect
+    public function checkAuthorization(MvcEvent $event): ?Response
     {
         if($event->getResponse()->getStatusCode() !== 200) {
             return null;

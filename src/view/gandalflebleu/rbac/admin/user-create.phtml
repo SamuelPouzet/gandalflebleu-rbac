@@ -1,0 +1,20 @@
+<div class="card border-primary mb-3" style="max-width: 20rem;">
+    <div class="card-header">Account creation</div>
+    <div class="card-body">
+        <?= $this->form()->openTag($this->form);; ?>
+        <div class="form-group">
+            <label for="login" class="form-label mt-4"><?= $this->formLabel($this->form->get('login')); ?></label>
+            <?= $this->formElement($this->form->get('login')); ?>
+            <small><?= $this->formElementErrors($this->form->get('login')); ?></small>
+        </div>
+        <div class="form-group">
+            <label for="login" class="form-label mt-4"><?= $this->formLabel($this->form->get('password')); ?></label>
+            <?= $this->formElement($this->form->get('password')); ?>
+            <small><?= $this->formElementErrors($this->form->get('password')); ?></small>
+        </div>
+        <?= $this->formElement($this->form->get('csrf')); ?>
+        <?= $this->formElementErrors($this->form->get('csrf')); ?>
+        <?= $this->formElement($this->form->get('submit')); ?>
+        <?= $this->form()->closeTag(); ?>
+    </div>
+</div>

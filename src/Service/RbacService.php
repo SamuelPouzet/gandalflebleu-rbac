@@ -134,12 +134,14 @@ class RbacService
         $permission = $this->entityManager->getRepository(Permission::class)->findOneBy([
             'code' => $permission
         ]);
-        if(! $permission) {
+         if(! $permission) {
             return false;
         }
         $userRoles = $user->getRoles();
+
         foreach ($userRoles as $userRole) {
             $acceptablesPermissions = $this->getPermissionsByRole($userRole);
+            var_dump($acceptablesPermissions);
             if (in_array($permission->getId(), $acceptablesPermissions)) {
                 return true;
             }

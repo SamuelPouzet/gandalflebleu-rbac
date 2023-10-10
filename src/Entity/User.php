@@ -122,7 +122,7 @@ class User
     public function getStatus(): UserStatus
     {
         $statusName = $this->status;
-        return UserStatus::$statusName;
+        return UserStatus::from($statusName);
     }
 
     /**

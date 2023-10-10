@@ -1,0 +1,29 @@
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">User login</th>
+        <th scope="col">Roles</th>
+        <th scope="col">Status</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->users as $user): ?>
+        <tr class="<?= $user->getStatus()->getClass(); ?>">
+            <th scope="row"><?= $user->getId(); ?></th>
+            <td><?= $user->getLogin(); ?></td>
+            <td>
+                <ul>
+                    <?php foreach($user->getRoles() as $role): ?>
+                        <?= $role->getName(); ?>
+                    <?php endforeach; ?>
+                </ul>
+            </td>
+            <td><?= $user->getStatus()->value; ?></td>
+            <td><a href="<?= $this->url('rbac-manager', ['action'=>'userEdit', 'id'=>$user->getId()]); ?>">edit</a></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<a class="btn btn-success" href="<?= $this->url('rbac-manager', ['action'=>'userCreate']) ?>">Create account</a>
