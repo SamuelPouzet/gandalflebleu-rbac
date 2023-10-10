@@ -141,7 +141,7 @@ class RbacService
 
         foreach ($userRoles as $userRole) {
             $acceptablesPermissions = $this->getPermissionsByRole($userRole);
-            var_dump($acceptablesPermissions);
+
             if (in_array($permission->getId(), $acceptablesPermissions)) {
                 return true;
             }

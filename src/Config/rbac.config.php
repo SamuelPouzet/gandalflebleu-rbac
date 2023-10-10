@@ -11,6 +11,8 @@ use Gandalflebleu\Rbac\Controller\AdminController;
 use Gandalflebleu\Rbac\Controller\Factory\AdminControllerFactory;
 use Gandalflebleu\Rbac\Controller\Factory\LogControllerFactory;
 use Gandalflebleu\Rbac\Controller\LogController;
+use Gandalflebleu\Rbac\Helpers\Factory\IsGrantedHelperFactory;
+use Gandalflebleu\Rbac\Helpers\IsGrantedHelper;
 use Gandalflebleu\Rbac\Listener\RbacListener;
 use Gandalflebleu\Rbac\Manager\Factory\UserManagerFactory;
 use Gandalflebleu\Rbac\Manager\UserManager;
@@ -107,6 +109,14 @@ return [
         'template_path_stack' => [
             'gandalflebleu-rbac' => dirname(__DIR__) . DIRECTORY_SEPARATOR . 'view',
         ],
+    ],
+    'view_helpers' => [
+        'factories' => [
+            IsGrantedHelper::class => IsGrantedHelperFactory::class,
+        ],
+        'aliases' => [
+            'isGranted' =>  IsGrantedHelper::class,
+        ]
     ],
     'doctrine' => [
         'driver' => [
